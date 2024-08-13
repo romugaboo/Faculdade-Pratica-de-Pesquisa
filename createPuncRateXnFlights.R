@@ -1,37 +1,32 @@
-df <- combined_df_2
-
-# Calcular as estatísticas para cada companhia aérea
 library(dplyr)
 
-# Remover linhas com status "cancelado"
-df <- df %>%
-  filter(status != "Cancelado")
+df <- combined_df_2
 
-# Remover valores negativos de 'delay_depart' se eles não fizerem sentido
-df <- df %>% 
+# Filter out canceled flights and outliers, and handle negative delays
+df_cleaned <- df %>%
+  filter(status != "Cancelado", outlier_arrival_delay == FALSE, outlier_depart_delay == FALSE) %>%
   mutate(delay_depart = ifelse(delay_depart < 0, 0, delay_depart))
 
-# Filtrar as empresas com mais de 1000 voos
-df_filtered <- df %>%
+# Filter companies with more than 1000 flights
+df_filtered <- df_cleaned %>%
   group_by(company) %>%
   filter(n() >= 1000)
 
-# Calcular as métricas desejadas
+# Calculate the desired metrics for each company
 result <- df_filtered %>%
-  group_by(company) %>%
   summarise(
-    vars = n_distinct(type),
-    n = n(),
-    sd = sd(delay_depart, na.rm = TRUE),
-    min = min(delay_depart, na.rm = TRUE),
-    max = max(delay_depart, na.rm = TRUE),
-    range = max - min,
-    se = sd/sqrt(n),
-    variable = "delay_depart",
-    rate = mean(delay_depart, na.rm = TRUE),
-    punc = mean(delay_depart <= 15, na.rm = TRUE)
+    vars = n_distinct(type),                     # Number of distinct flight types
+    n = n(),                                     # Number of flights
+    sd = sd(delay_depart, na.rm = TRUE),         # Standard deviation of delays
+    min = min(delay_depart, na.rm = TRUE),       # Minimum delay
+    max = max(delay_depart, na.rm = TRUE),       # Maximum delay
+    range = max - min,                           # Range of delays
+    se = sd / sqrt(n),                           # Standard error
+    variable = "delay_depart",                   # Variable name
+    rate = mean(delay_depart, na.rm = TRUE),     # Mean delay
+    punc = mean(delay_depart <= 15, na.rm = TRUE) # Punctuality rate (<= 15 mins)
   ) %>%
   ungroup()
 
-# Exportar para CSV
+# Export the results to a CSV file
 write.csv(result, "puncRateXnFlights.csv", row.names = FALSE)
