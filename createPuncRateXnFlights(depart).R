@@ -1,18 +1,21 @@
 library(dplyr)
-library(e1071) # Para calcular skewness e kurtosis
+library(e1071)
 
 df <- combined_df_2
 
-# Remover linhas com status "Cancelado"
 df <- df %>%
-  filter(status != "Cancelado")
+  filter(status != "Cancelado", outlier_depart_delay == FALSE)
 
 # Substituir valores negativos de delay_depart por 0
 df <- df %>%
   mutate(delay_depart = ifelse(delay_depart < 0, 0, delay_depart))
 
-# Calcular as métricas para cada aeroporto de origem
-result <- df %>%
+df_filtered <- df %>%
+  group_by(depart) %>%
+  filter(n() >= 1000) %>%
+  ungroup()
+
+result <- df_filtered %>%
   group_by(depart) %>%
   summarise(
     vars = n_distinct(type),
@@ -34,5 +37,4 @@ result <- df %>%
     punc = mean(delay_depart <= 15, na.rm = TRUE)
   )
 
-# Exportar o resultado para um arquivo CSV
 write.csv(result, "puncRateXnFlights(depart).csv", row.names = FALSE)
