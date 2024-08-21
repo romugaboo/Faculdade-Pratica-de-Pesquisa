@@ -1,10 +1,7 @@
-# Carregar o arquivo .RData
 load("bfd/combined_data.rdata")
 
-# Assumindo que o dataframe principal está em 'combined_df'
-df <- combined_df  # Substitua pelo nome correto, se for diferente
+df <- combined_df
 
-# Calcular o número total de voos por 'depart_day_period'
 library(dplyr)
 
 result <- df %>%
