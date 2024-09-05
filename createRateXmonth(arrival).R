@@ -28,6 +28,6 @@ calculate_delay_probability_by_month <- function(data) {
   return(monthly_stats)
 }
 
-monthly_delay_probability <- calculate_delay_probability_by_month(combined_df_2)
+monthly_delay_probability <- calculate_delay_probability_by_month(combined_df)
 print(monthly_delay_probability)
 write.csv(monthly_delay_probability, "rateXmonth(arrival).csv", row.names = FALSE)

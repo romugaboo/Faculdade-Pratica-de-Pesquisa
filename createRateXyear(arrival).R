@@ -2,7 +2,7 @@ library(dplyr)
 library(e1071)
 
 calculate_punctuality_stats <- function(data, year, confidence_level = 0.95) {
-  z <- qnorm((1 + confidence_level) / 2)  # z-value for the confidence interval
+  z <- qnorm((1 + confidence_level) / 2)
   
   data %>%
     filter(status != "Cancelado", outlier_arrival_delay == FALSE) %>%
@@ -21,8 +21,8 @@ calculate_punctuality_stats <- function(data, year, confidence_level = 0.95) {
       skew = skewness(delay_arrival, na.rm = TRUE),
       kurtosis = kurtosis(delay_arrival, na.rm = TRUE),
       se = sd / sqrt(n),
-      lLimit = mean - z * (sd / sqrt(n)),  # Lower confidence limit
-      hLimit = mean + z * (sd / sqrt(n)),  # Upper confidence limit
+      lLimit = mean - z * (sd / sqrt(n)),
+      hLimit = mean + z * (sd / sqrt(n)),
       year = year,
       variable = "delay_arrival"
     )

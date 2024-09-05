@@ -14,5 +14,4 @@ result <- df %>%
     depart_day_period %in% c("Early Evening", "Late Evening", "Night") ~ "Night"
   ))
 
-# Salvar o resultado em um arquivo .csv
-write.csv(result, file = "bfd/dayPeriodXnFlights(origin).csv", row.names = FALSE)
+write.csv(result, file = "bfd/dayPeriodXnFlights.csv", row.names = FALSE)

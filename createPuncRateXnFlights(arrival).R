@@ -1,7 +1,7 @@
 library(dplyr)
 library(e1071)
 
-df <- combined_df_2
+df <- combined_df
 
 df <- df %>%
   filter(status != "Cancelado", outlier_arrival_delay == FALSE)

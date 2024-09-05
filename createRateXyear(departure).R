@@ -2,13 +2,12 @@ library(dplyr)
 library(e1071)
 
 calculate_punctuality_stats <- function(data, year, confidence_level = 0.95) {
-  z <- qnorm((1 + confidence_level) / 2)  # z-value for the confidence interval
+  z <- qnorm((1 + confidence_level) / 2)
   
   data %>%
 
     filter(status != "Cancelado", outlier_depart_delay == FALSE) %>%
     mutate(delay_depart = ifelse(delay_depart < 0, 0, delay_depart)) %>%
-    # Calculate metrics
     summarise(
       vars = n_distinct(type),
       n = n(),

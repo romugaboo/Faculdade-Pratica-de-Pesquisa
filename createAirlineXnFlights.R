@@ -1,11 +1,11 @@
 library(dplyr)
 
-df_filtered <- combined_df_2 %>%
-  filter(!is.na(type), type != "X") %>%  # Remove rows with NA or "X" in 'type'
+df_filtered <- combined_df %>%
+  filter(!is.na(type), type != "X") %>%  # removendo linhas com NA ou "X"
   group_by(company) %>%
   filter(n() >= 15000)
 
-# Calculate the number of flights by 'company' and 'type'
+
 result <- df_filtered %>%
   group_by(company, type) %>%
   summarise(n = n()) %>%
@@ -19,5 +19,4 @@ result <- df_filtered %>%
     type %in% c("C", "G", "L") ~ "C",
   ))
 
-# Export the results to a CSV file
 write.csv(result, file = "airlineXnFlights.csv", row.names = FALSE)

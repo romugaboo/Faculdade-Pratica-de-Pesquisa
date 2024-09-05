@@ -1,9 +1,9 @@
-df_filtered <- combined_df_2 %>%
-  filter(!is.na(type), type != "X") %>%  # Remove rows with NA or "X" in 'type'
+df_filtered <- combined_df %>%
+  filter(!is.na(type), type != "X") %>%  
   group_by(depart) %>%
   filter(n() >= 50000)
 
-# Calcular o número de voos por 'depart' e 'type'
+
 library(dplyr)
 
 result <- df_filtered %>%

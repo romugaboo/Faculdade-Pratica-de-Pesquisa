@@ -7,16 +7,16 @@ calculate_punctuality <- function(data, year) {
       !is.na(delay_depart),
       outlier_depart_delay == FALSE
     ) %>%
-    mutate(delay_depart = ifelse(delay_depart < 0, 0, delay_depart))  # Treat early flights as on-time
+    mutate(delay_depart = ifelse(delay_depart < 0, 0, delay_depart))
   
   stats <- data_filtered %>%
     summarise(
       n = n(),
-      delayed_flights = sum(delay_depart > 15, na.rm = TRUE),  # Flights delayed by more than 15 minutes
-      punctual_flights = sum(delay_depart <= 15, na.rm = TRUE), # Flights delayed by 15 minutes or less
-      punctuality_percentage = mean(delay_depart <= 15, na.rm = TRUE),  # Punctuality percentage (<= 15 mins)
-      mean = punctuality_percentage,  # Mean punctuality percentage
-      sd = sd(as.numeric(delay_depart <= 15), na.rm = TRUE),  # Standard deviation of punctuality
+      delayed_flights = sum(delay_depart > 15, na.rm = TRUE),
+      punctual_flights = sum(delay_depart <= 15, na.rm = TRUE),
+      punctuality_percentage = mean(delay_depart <= 15, na.rm = TRUE),
+      mean = punctuality_percentage,
+      sd = sd(as.numeric(delay_depart <= 15), na.rm = TRUE),
       median = median(as.numeric(delay_depart <= 15), na.rm = TRUE),
       trimmed = mean(as.numeric(delay_depart <= 15), trim = 0.1, na.rm = TRUE),
       mad = mad(as.numeric(delay_depart <= 15), na.rm = TRUE),
